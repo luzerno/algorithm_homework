@@ -1,0 +1,285 @@
+\documentclass[letterpaper, 11pt]{article}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{times}
+%\usepackage[in]{fullpage}
+\usepackage{amsmath,amsfonts,amsthm}
+\usepackage{graphicx}
+\usepackage{color}
+
+%\documentclass[11pt]{article}
+%\pagestyle{myheadings}
+%\usepackage[ruled,nothing]{algorithm}
+%\usepackage{algorithmic}
+%\usepackage[dvips]{epsfig,graphicx}
+%\numberwithin{equation}{section}
+
+\bibliographystyle{plain}
+
+\newenvironment{newalgo}[2]{\begin{algorithm}
+
+\caption{\textsc{#1}}\label{#2}
+
+\begin{algorithmic}[1]}{\end{algorithmic}\end{algorithm}}
+
+
+
+\newcommand{\gm}{\gamma}
+\newcommand{\wh}{\widehat}
+\newcommand{\rep}{representation}
+\newcommand{\rv}{random variable}
+\newcommand{\la}{\lambda}
+\newcommand{\wt}{\widetilde}
+\newcommand{\st}{such that}
+\newcommand{\slvary}{slowly varying}
+\newcommand{\ma}{moving average}
+\newcommand{\regvary}{regularly varying}
+\newcommand{\asy}{asymptotic}
+\newcommand{\ts}{time series}
+\newcommand{\id}{infinitely divisible}
+\newcommand{\seq}{sequence}
+\newcommand{\fidi}{finite dimensional \ds}
+
+\newcommand{\ble}{\begin{lemma}}
+\newcommand{\ele}{\end{lemma}}
+\newcommand{\bfX}{{\bf X}}
+\newcommand{\pro}{probabilit}
+\newcommand{\BX}{{\bf X}}
+\newcommand{\BY}{{\bf Y}}
+\newcommand{\BZ}{{\bf Z}}
+\newcommand{\BV}{{\bf V}}
+\newcommand{\BW}{{\bf W}}
+\newcommand{\reals}{{\mathbb R}}
+\newcommand{\bbr}{\reals}
+
+\newcommand{\balpha}{\mbox{\boldmath$\alpha$}}
+\newcommand{\bbeta}{\mbox{\boldmath$\beta$}}
+\newcommand{\bmu}{\mbox{\boldmath$\mu$}}
+\newcommand{\tbmu}{\mbox{\boldmath${\tilde \mu}$}}
+\newcommand{\bEta}{\mbox{\boldmath$\eta$}}
+
+
+
+\def \br#1{\left \{#1 \right \}}
+\def \pr#1{\left (#1 \right)}
+
+\newcommand{\Gm}{\Gamma}
+\newcommand{\ep}{\epsilon}
+
+
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{figur}[lemma]{Figure}
+\newtheorem{theorem}[lemma]{Theorem}
+\newtheorem{proposition}[lemma]{Proposition}
+\newtheorem{definition}[lemma]{Definition}
+\newtheorem{corollary}[lemma]{Corollary}
+\newtheorem{example}[lemma]{Example}
+\newtheorem{exercise}[lemma]{Exercise}
+\newtheorem{remark}[lemma]{Remark}
+\newtheorem{fig}[lemma]{Figure}
+\newtheorem{tab}[lemma]{Table}
+\newtheorem{fact}[lemma]{Fact}
+\newtheorem{test}{Lemma}
+\newtheorem{algorithm}[lemma]{Algorithm}
+
+\newcommand{\play}{\displaystyle}
+
+\newcommand{\ms}{measure}
+\newcommand{\beao}{\begin{eqnarray*}}
+\newcommand{\eeao}{\end{eqnarray*}\noindent} \newcommand{\beam}{\begin{eqnarray}}
+\newcommand{\eeam}{\end{eqnarray}\noindent}
+
+\newcommand{\halmos}{\hfill\mbox{\qed}\\}
+\newcommand{\fct}{function}
+\newcommand{\ins}{insurance}
+\newcommand{\ds}{distribution}
+
+\newcommand{\one}{{\bf 1}}
+\newcommand{\eid}{\buildrel{\rm d}\over {=}}
+\newcommand {\Or}{\rm ORDER}
+\newcommand {\In}{\rm INTER}
+
+\newcommand{\bbd}{{\mathbb D}}
+\newcommand{\vi}{$V_{ij}$ }
+\newcommand{\rr}{R^{\prime\prime}}
+%\newcommand{\R}{R^\prime}
+\newcommand{\ci}{\frac{1}{c}}
+\newcommand{\Vi}{V(n)}
+\newcommand{\dR}{\mathcal R}
+\newcommand{\md}[1]{\left(\ \rm{mod}\ \it{#1}\right)}
+\newcommand{\So}{s}
+%\begin{document}
+%\def\DoubleSpace{\baselineskip=24pt}
+%\DoubleSpace \sloppy
+
+\newcommand{\feedback}[1]{\textcolor{red}{#1}}
+
+\begin{document}
+
+
+
+\title{Homework \#3 \\ Introduction to Algorithms/Algorithms 1 \\ 600.363/463 \\Spring 2013}
+\author{Yifan Ge}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\section{Problem 1 (20 points)} % #6
+Assume that there are $N$ robots $R_1,\dots, R_N$ and $N$ tasks, $T_1, \dots,T_N$.
+Typically, robot $R_i$ performs task $T_i$. Also, the power of robots grows with their index.
+Thus, robot $R_i$ can perform any task $T_j$ without a failure for $j\le i$ but it will fail if $i<j$.
+As a result of a program bug, all tasks have been permuted randomly and then assigned to robots. That is, $R_i$ performs task $T_{\pi(i)}$, where $\pi$ is a random permutation of the numbers $\{1,2,\dots, N\}$.
+\begin{enumerate}
+\item What is the expected number of robots that perform their original tasks?\\
+\textbf{Solution:} Let random variable $X_i=1$ if the robot $R_i$ performs its original task, and $X_i=0$ if $R_i$ does not perform its original task. We have 
+\begin{align}
+    P\{X_i=1\}&=\frac{1}{N}\\
+    E[X_i]&=\frac{1}{N}
+\end{align}
+We assume the number of robots that perform their original task to be a random variable $Y$, we have $Y = \sum_{i=1}^{N}X_i$. Then the expectation of $Y$ is:
+\begin{align}
+    E[Y] &= E[\sum_{i=1}^{N}X_i]\\
+    &=\sum_{i=1}^{N}E[X_i]\\
+    &=1
+\end{align}
+
+\item What is the expected number of failures?\\
+\textbf{Solution:} Let random variable $X_i=1$ denote that the robot $R_i$ encounters a failure. We have:\\
+\begin{align}
+    P\{X_i=1\}&=\frac{N-i}{N}\\
+    E[X_i]&=\frac{N-i}{N}
+\end{align}
+We assume the number of failures to be a random variable $Y$, and $Y=\sum_{i=1}^{N}X_i$. The expectation of $Y$ is:
+\begin{align}
+    E[Y] &= E[\sum_{i=1}^{N}X_i]\\
+    &=\sum_{i=1}^{N}E[X_i]\\
+    &=\sum_{i=1}^{N}\frac{N-i}{N}\\
+    &=\frac{N-1}{2}
+\end{align}
+
+\end{enumerate}
+
+
+
+\section{Problem 2 (20 points)}
+
+\subsection{(10 points)}
+
+
+Resolve the following recurrences. Use Master theorem, if applicable.
+In all examples assume that $T(1) = 1.$
+To simplify your analysis, you can assume that $n = a^k$ for some $a, k$.
+
+\begin{enumerate}
+\item $T(n) = 5T(n/2) + \sqrt{n}$\\
+\textbf{Solution:} As $\sqrt{n} = n^{0.5} = O(n^{\log_{2}{5}-\epsilon})$, with $\epsilon=0.1$, $T(n)=\Theta(n^{\log_{2}{5}})$.
+
+\item $T(n) = T(n/2) + 10$\\
+\textbf{Solution:} As $10 = \Theta(n^{\log_{2}{1}})=\Theta(1)$,  $T(n)=\Theta(n^{\log_{2}{1}}\lg{n})=\Theta(\lg{n})$.
+
+\item $T(n) = 200T(\sqrt{n}) + n$\\
+\textbf{Solution:} As $n=a^k$, we have $k=\log_{a}{n}$. Rewrite the recurrence as follows:\\
+\begin{align}
+    T(a^k) = 200T(a^{\frac{1}{2}k})+a^k
+\end{align}
+Let $S(k)=T(n)=T(a^k)$, we get 
+\begin{align}
+    S(k)&=200T(a^{\frac{1}{2}k})+a^k\\
+        &=200S(\frac{1}{2}k)+a^k
+\end{align}
+Now we can use Master theorem to resolve this recurrence for $S(k)$. Here we have $f(n)=a^k=\Omega(k^{\log_{2}{200}+\epsilon})$ and if we choose $c=200$ we can satisfy $200a^{k/2} \le ca^k$ with sufficiently large $k$. As a result we get $S(k)=\Theta(a^k)$. Substitute $S(k)$ with $T(n)$ and $a^k$ with $n$, we have $T(n)=\Theta(n)$.
+
+
+\item $T(n) = 12T(n/12) + n^2$\\
+\textbf{Solution:} As $f(n)=n^2=\Omega(n^{\log_{12}{12}+\epsilon})=\Omega(n^{\epsilon})$ with $\epsilon=0.1$, and if we choose $c=\frac{1}{10}$, $12f(n/12) \le cf(n)$ satisfies for all sufficiently large $n$. So $T(n)=\Theta(f(n))=\Theta(n^2)$.
+
+\item $T(n) = T(n/200) + n^{200}$\\
+\textbf{Solution:} As $f(n)=n^{200}=\Omega(n^{\log_{200}{1}+\epsilon})=\Omega(n^{\epsilon})$ with $\epsilon=0.1$, and if we choose $c=\frac{1}{20^{200}-1}$, $f(\frac{n}{200}) \le cf(n)$ will satisfy for sufficiently large $n$. So we have $T(n)=\Theta(f(n))=\Theta(n^{200})$.
+
+\item $T(n) = n+T(n-1)$\\
+\textbf{Solution:} We cannot use Master theorem for this problem. We can use the substitution method to solve the recurrence:\\
+\begin{align}
+    T(n) &= n+T(n-1) \\
+    &=n+(n-1)+T(n-2) \\
+    &=n+(n-1)+(n-2)+T(n-3) \\
+    &=n+(n-1)+(n-2)+\dots+(n-k+1)+T(n-k)\\
+    &=\sum_{k=2}^{n}{k}+T(1)\\
+    &=\frac{(n+2)(n-1)}{2}+1 \\
+    &=\Theta(n^2)
+\end{align}
+
+\item $T(n) = 50T(n/45) + n^3$\\
+\textbf{Solution:} Applying Master theorem, $f(n)=n^3=\Omega(n^{\log_{45}{50}+\epsilon})$ with $\epsilon=0.1$, and choosing $c=\frac{1}{50\cdot45^3-1}$ satisfies $50f(\frac{n}{45}) \le cf(n)$ for sufficiently large $n$. As a result, $T(n)=\Theta(f(n))=\Theta(n^3)$.
+
+\item $T(n) = \sqrt{n}T(n/2)$\\
+\textbf{Solution:} Master theorem is not applicable for this problem. Using substitution method:\\
+\begin{align}
+    T(n) &= \sqrt{n}T(n/2)\\
+         &= \sqrt{n}\sqrt{n/2}T(n/4)\\
+         &= \sqrt{n}\sqrt{n/2}\dots\sqrt{n/2^{k-1}}T(n/2^k)\\
+         &= \sqrt{n(n/2)\dots(n/2^{k-1})}T(n/2^k)\\
+         &= \sqrt{n(n/2)\dots(n/2^{\log_{2}{n}-1})}T(1)\\
+         &= \sqrt{\frac{n^{\log_{2}{n}}}{2^{(\log_{2}{n}-1)(\log_{2}{n})/2}}}\\
+         &= \sqrt{\frac{n^{\log_{2}{n}}}{n^{(\log_{2}{n}-1)/2}}}\\
+         &= n^{\frac{1}{4}\log_{2}{n}+\frac{1}{4}}
+\end{align}
+\item $T(n) = 5T(n/4) + n$\\
+\textbf{Solution:} Using Master theorem, $f(n)=n=O(n^{\log_{4}{5}-\epsilon})$ with $\epsilon=0.1$. So $T(n)=\Theta(n^{\log_{4}{5}})$.
+
+\item $T(n) = 9T(n/3) + n^2$\\
+\textbf{Solution:} Using Master theorem, $f(n)=n^2=\Theta(n^{\log_{3}{9}})=\Theta(n^2)$, so $T(n)=\Theta(n^2\lg{n})$.
+
+\end{enumerate}
+
+\subsection{(10 points)}
+
+Imagine abstract problem $A$ with the input of size $n$.
+You and your friends came up with the following four algorithms that solve $A$:
+\begin{enumerate}
+\item Algorithm $X$ divides $A$ into $5$ subproblems of half the size, recursively solves each subproblem and then combines the solutions in quadratic time. 
+\item Algorithm $Y$ divides $A$ into $1$ subproblem of size $n-2$, recursively solves the subproblem and then derives the solution in linear time.
+\item Algorithm $Z$ divides $A$ into $2$ subproblems of size $n-1$, recursively solves each subproblem and then combines the solutions in constant time.
+\item Algorithm $W$ divides $A$ into $100$ subproblems of size $n/1000$, recursively solves each subproblem and then combines the solutions in linear time.
+\end{enumerate}
+Which algorithm you should choose and why?\\
+\textbf{Solution:} The time complexities in recurrence of the four algorithms are:\\
+\begin{align}
+    T_X(n) &= 5T_X(n/2)+c_1n^2\\
+    T_Y(n) &= T_Y(n-2)+c_2n\\
+    T_Z(n) &= 2T_Z(n-1)+c_3\\
+    T_W(n) &= 100T_W(n/1000)+c_4n
+\end{align}
+$c_1, c_2, c_3, c_4$ are constants.\\
+Solve the four recurrences:
+\begin{enumerate}
+\item For Algorithm $X$, we can use Master theorem to solve for $T_X(n)$. As $c_1n^2=O(n^{\log_{2}{5}-\epsilon})$ with $\epsilon=0.1$, apply the Master theorem we get $T_X(n)=\Theta(n^{\log_{2}{5}})$.
+
+\item For Algorithm $Y$, we use the substitution method to solve the recurrence.\\
+\begin{align}
+    T_Y(n) &= T_Y(n-2) + c_2n\\
+           &= T_Y(n-4) + c_2(n+(n-2))\\
+           &= c_2(\frac{(n+2)n}{4})+O(1) \label{eq:even}\\
+           &= \Theta(n^2)
+\end{align}
+In equation (\ref{eq:even}) we assume $n$ is even and $T_Y(0)=O(1)$.
+
+\item For Algorithm $Z$, use the substitution method:\\
+\begin{align}
+    T_Z(n) &= 2T_Z(n-1)+c_3\\
+           &= 2(2T_Z(n-2)+c_3)+c_3\\
+           &= 2^{k}T_Z(n-k)+c_3(1+2+2^2+\dots+2^k)\\
+           &= 2^{n-1}T_Z(1)+c_3(1+2+2^2+\dots+2^{n-1})\\
+           &= O(2^{n-1})+(2^{n}-1)c_3\\
+           &= \Theta(2^n)
+\end{align}
+
+\item For Algorithm $W$, we can use the Master theorem. $f(n)=c_4n=\Omega(n^{\log_{1000}{100}+\epsilon})$, and choosing $c=\frac{1}{1000}$ satisfies that $100f(n/1000) \le cf(n)$ with sufficiently large $n$. As a result, $T_W(n)=\Theta(f(n))=\Theta(n)$.
+\end{enumerate}
+Comparing the time complexities of the four algorithms, we should choose Algorithm $W$.
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

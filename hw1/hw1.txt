@@ -1,0 +1,437 @@
+Homework #1
+Introduction to Algorithms/Algorithms 1
+600.363/463
+Spring 2013
+Yifan Ge
+February 4, 2013
+
+1
+
+Problem 1 (20 points)
+
+1.1
+
+(10 points)
+
+For each statement below explain if it is true or false and prove your answer. Be as
+precise as you can. The base of log is 2 unless stated otherwise.
+1. 739 (n + 343n2 ) = Θ(n2 )
+We need to determine positive c1 and c2 and n0 , such that for all n > n0 ,
+c1 n2 ≤ 739 (n + 343n2 ) ≤ c2 n2 ,
+
+(1)
+
+Dividing by n2 yields
+c1 ≤ 739 (
+
+1
++ 343) ≤ c2 ,
+n
+
+(2)
+
+If we choose c1 = 343 · 739 and c2 = 344 · 739 , the inequality holds for all
+n > 1. Hence the statement is true.
+2. 2n = Θ(en+
+
+√
+
+n)
+
+Assume the statement to be true, we need to ﬁnd positive c1 and c2 and n0 ,
+such that for all n > n0 ,
+c1 en+
+
+√
+
+n
+
+√
+
+≤ 2n ≤ c2 en+
+1
+
+n
+
+.
+
+(3)
+
+However, as
+
+2n
+
+lim
+
+√ = 0,
+(4)
+en+ n
+no positive c1 can be found to satisfy the inequality. Therefore the statement
+is false.
+n→+∞
+
+3. en = Θ(2(3n) )
+As
+
+23n
+23
+= lim ( )n = +∞,
+n→+∞ en
+n→+∞ e
+lim
+
+(5)
+
+no positive c2 can be found to satisfy en ≤ c2 23n , therefore the statement is
+false.
+4. en = Θ(2(n+3) )
+As
+lim
+
+n→+∞
+
+en
+2n+3
+
+= lim
+
+n→+∞
+
+1 e n
+( ) = +∞,
+8 2
+
+(6)
+
+no positive c2 can be found to satisfy en ≤ c2 2(n+3) , therefore the statement
+is false.
+5. log2 (n7 ) = O(loge (n10000000000 ))
+This equality holds if we can ﬁnd positive c and n0 , such that for all n > n0 ,
+0 ≤ log2 (n7 ) ≤ c loge (n10000000000 ).
+
+(7)
+
+As loge (n10000000000 ) > 0 holds, divide by loge (n10000000000 ) yields
+0≤
+
+log2 (n7 )
+≤ c.
+loge (n10000000000 )
+
+The left-hand inequality holds for any value of n. As
+7
+10000000000
+
+(8)
+log2 (n7 )
+loge (n10000000000 )
+
+=
+
+log2 e, the right-hand inequality can be made to hold for any
+7
+value of n ≥ 1 by choosing c ≥ 10000000000 log2 e. Therefore the statement
+is true.
+
+2
+
+6. arctan(n) = O(n)
+0 < arctan(n) < π holds when n > 0. Therefore we can choose n0 ≥
+2
+1, c ≥ π to satisfy 0 ≤ arctan(n) ≤ cn. The statement is true.
+2
+7. Let f, g be positive functions. Then f (n) + g(n) = Θ(min(f (n), g(n)))
+We assume f (n) = 2n , g(n) = 1, for any value of n > 0, we have
+min(f (n), g(n)) = g(n) = 1. As f (n) + g(n) = 2n + 1 = Θ(1), the
+statement is false.
+8. nlog log(n) = Ω( log(n100 )
+
+1.000001
+
+)
+
+In order to prove this equality to be true, we need to ﬁnd positive c and n0 ,
+such that for any n > n0 , 0 ≤ c(log(n100 ))1.000001 ≤ nlog log(n) .
+It is obvious that the left-hand inequality holds for any n > 1.
+In order to make the right-hand to hold, we apply logarithm to both the two
+sides:
+
+log(c(log(n100 ))1.000001 ) ≤ log(nlog log(n) )
+log(c) + 1.000001(log(100) + log log(n)) ≤ log log(n) log(n)
+c≤2
+
+(9)
+(10)
+
+(log(n)−1.000001) log log(n)−1.000001 log(100)
+
+(11)
+If we choose n0 = 256, for any value of n > 256, 2(log(n)−1.000001) log log(n)−1.000001 log(100) ≈
+14.36 > 0. Therefore we can ﬁnd a postive c (0 < c < 14) which satisﬁes
+the inequality.
+Hence the statement is true.
+9. Let f be a positive function. Then f (n) + o(f (n)) = Θ(f (n)).
+As
+0 ≤ o(f (n)) < cf (n)
+
+(12)
+
+holds for any n > n0 (n0 and c are postive constants). We have
+f (n) ≤ f (n) + o(f (n)) < (c + 1)f (n)
+
+(13)
+
+If we choose c1 = 1, c2 = c + 1, we can get f (n) + o(f (n)) = Θ(f (n)).
+Therefore the statement is true.
+3
+
+1.2
+
+(10 points)
+
+1. Prove that
+
+n
+√
+i= n
+
+n
+√
+
+i= n
+
+1
+≤
+i3
+
+1
+1
+= O( √ ).
+3
+i
+n
+
+n
+√
+
+i= n
+
+= (n −
+
+1
+√ 3
+( n)
+√
+
+1
+n + 1) √ 3
+( n)
+
+1
+≤n √ 3
+( n)
+1
+=√
+n
+As
+
+n
+
+(14)
+(15)
+(16)
+(17)
+
+1
+≥0
+i3
+
+(18)
+
+1
+1
+= O( √ ).
+3
+i
+n
+
+(19)
+
+√
+i= n
+
+holds for any n > 0. We get
+n
+√
+i= n
+
+4
+
+2
+
+Problem 2(20 Points)
+
+2.1
+
+(10 points)
+
+Prove by induction that 4n + 6n + 8 is divisible by 9 for all n ≥ 1.
+Basis: First we show the statement holds for n = 1.
+When n = 1, 4n + 6n + 8 = 18, which is divisible by 9. So the statement is true
+for n = 1.
+Inductive step: We need to show that if statement holds when n = k, it also
+holds when n = k + 1.
+When n = k, 4n + 6n + 8 = 4k + 6k + 8 is divisible by 9.
+When n = k + 1,
+4n + 6n + 8 = 4k+1 + 6(k + 1) + 8
+= (4k + 6k + 8) + (3 · 4k + 6)
+k
+
+k
+
+= (4 + 6k + 8) + 3(4 + 2)
+
+(20)
+(21)
+(22)
+
+As 4k + 6k + 8 is divisible by 9, we need to prove 4k + 2 is divisible by 3.
+4k + 2 = (3 + 1)k + 2
+k
+
+=
+i=0
+k−1
+
+k k−i
+3
++2
+i
+
+=3
+i=0
+k−1
+
+= 3(
+i=0
+
+(23)
+(24)
+
+k k−i−1
+3
++1+2
+i
+
+(25)
+
+k k−i−1
+3
++ 1)
+i
+
+(26)
+
+Therefore, then statement is true when n = k + 1. Since both the basis and the
+inductive step have been proved, we can prove by induction that 4n + 6n + 8 is
+divisible by 9 for all n >= 1.
+
+2.2
+
+(10 points)
+
+1. Let A, B, C, D be sets. Prove that
+(A ∩ B) ∪ (C ∩ D) = (A ∪ C) ∩ (B ∪ C) ∩ (A ∪ D) ∩ (B ∪ D).
+
+5
+
+Using the distributed law:
+(A ∩ B) ∪ (C ∩ D) = (A ∪ (C ∩ D)) ∩ (B ∪ (C ∩ D))
+
+(27)
+
+= ((A ∪ C) ∩ (A ∪ D)) ∩ ((B ∪ C) ∩ (B ∪ D))
+(28)
+= (A ∪ C) ∩ (A ∪ D) ∩ (B ∪ C) ∩ (B ∪ D) (29)
+= (A ∪ C) ∩ (B ∪ C) ∩ (A ∪ D) ∩ (B ∪ D) (30)
+We apply the associative law in (29) and apply the commutative law in (30).
+2. There are 10 cookies of different colors in the jar. What is the number of
+different ways to divide the cookies between Alice and Bob? What if the
+cookies are of the same color (i.e., identical)?
+(a) For the case that the cookies are different, there are two choices (Alice
+or Bob) for every cookie, so there are 210 = 1024 different ways to
+divide the cookies.
+(b) For the case that the cookies are identical, there are 11 different ways
+to divide the cookies. This is because the number of cookies Alice gets
+can be 0 to 10.
+3. We have 50 balls. Each ball, independently and randomly, is placed into one
+of 5 bins. What is the probability that there are no empty bins at the end of
+our experiment?
+If we place 50 balls into i(1 ≤ i ≤ 5) bins, assume the probability that there
+are no empty bins to be Pi . We have:
+P1 = 1
+2
+1
+3
+P3 = 1 −
+1
+4
+P4 = 1 −
+1
+5
+P5 = 1 −
+1
+
+P2 = 1 −
+
+(31)
+1
+( )50 P1
+2
+2
+( )50 P2 −
+3
+3
+( )50 P3 −
+4
+4
+( )50 P4 −
+5
+
+(32)
+3 1 50
+( ) P1
+2 3
+4 2 50
+( ) P2 −
+2 4
+5 3 50
+( ) P3 −
+2 5
+
+6
+
+(33)
+4 1 50
+( ) P1
+(34)
+3 4
+5 2 50
+5 1 50
+( ) P2 −
+( ) P1
+3 5
+4 5
+(35)
+
+The probability needed is P5 .
+4. There are 25 students in the class. Prove that there are always at least three
+students whose birthdays are in the same month.
+Assume there are at most 2 students whose birthdays are in the same month,
+in this case, the number of students is at most 2 ∗ 12 = 24. No matter in
+which month the 25th student’s birthday is, there are at least 3 students have
+their birthdays in the same month.
+
+7
+
+
