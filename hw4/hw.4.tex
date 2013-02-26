@@ -132,13 +132,20 @@ Full credit will be given if your algorithm works in $O(N)$ time.
 
 Partial credit will be given if your algorithm works in $O(N\log(N))$ time.\\
 
-\textbf{Solution:} We can observe that if $k$ is the undisputed champion of $A$, $k$ must be the median of $A$. So we can use the algorithm described in Chapter II to find the median in $O(n)$ time. Then we need to verify if the median is the undisputed champion. This can be done by looping through $A$ and count the occurrences of median found. If the median occupies more than half of the entries, it is the undisputed champion; if not, there is no undisputed champion in $A$. This step also runs in $O(n)$ time. So the algorithm works in $O(N)$ time.\\
-Algorithm \ref{algo:champion} shows the pseudocode for this algorithm.
+\textbf{Solution:} We can observe that if $k$ is the undisputed champion of $A$, $k$ must be the median of $A$. So we can use the algorithm described in Chapter II to find the median in $O(n)$ time. Then we need to verify if the median is the undisputed champion. This can be done by looping through $A$ and count the occurrences of the median. If the median occupies more than half of the entries, it is the undisputed champion; if not, there is no undisputed champion in $A$. This step also runs in $O(n)$ time. So the algorithm works in $O(N)$ time.\\
+Algorithm \ref{algo:champion} shows the pseudocode for this algorithm.\\
+
+\textbf{Proof of Correctness:} Now we prove the correctness of this algorithm. First we need to prove that if the undisputed champion of $A$ exists, it must be the median of $A$. \\
+We will prove this by contradiction. Assume there exists an undisputed champion $k$ for array $A$, and the median of all the numbers in $A$ is $l$, we have $k \neq l$. Assume $B$ is an array of length $N$ containing the same numbers as $A$, and the numbers in $B$ have been sorted in non-decreasing order. Since $k$ is the undisputed champion of $A$, it is also the undisputed champion of $B$, and there are at least $\lfloor \frac{N}{2} \rfloor + 1$ $k$'s in $B$. Since $l$ is the median of $A$, it
+is also the median of $B$, and it is the $\lceil \frac{N}{2} \rceil$-th number in $B$. According to the pigeonhole principle, the $k$'s cannot be all located in the one side of $l$. As $k \neq l$, we must have some $k$'s on the left side of $l$ and some $k$'s on the right side of $l$. Let $B[i]=B[j]=k$ and $i < \lceil \frac{N}{2} \rceil < j$. As $B$ is sorted in non-decreasing order, we have $B[i] \le B[\lceil \frac{N}{2} \rceil] = l \le B[j]$, which means $k=l$, but this contradicts
+with our claim that $k \neq l$. As a result, if there exists an undisputed champion $k$ for array $A$, it must be the median of all the numbers in $A$.\\
+If there is an undisputed champion in $A$, it must be the median $k$, so $k$ occupies more than half of the entries, and the algorithm returns $true$. While there is no undisputed champion, the median $k$ will not pass the verification, so the algorithm returns $false$. As a result, the algorithm is correct.
+
 \begin{algorithm}
 \label{algo:champion}
 \caption{Check if there is a undisputed champion in array $A$}
 \begin{algorithmic}[1]
-    \STATE $k \leftarrow FindMedian(A)$ 
+    \STATE $k \leftarrow findMedian(A)$ 
     \STATE $cnt \leftarrow 0$
     \FOR{$i \leftarrow 1$ \textbf{to} $length(A)$}
         \IF{$A[i] == k$}
@@ -155,26 +162,103 @@ Algorithm \ref{algo:champion} shows the pseudocode for this algorithm.
 
 \section{Problem 2 (20 points)}
 \subsection{(10 points)}
-Let A be an array of size $n$ of integers with the property that the number of distinct integers is  $O(\log(n))$. Design an efficient $O(n\log\log(n))$ algorithm to sort $A$.\\
-\textbf{Solution:} This can be done using a self-balancing binary search tree like Red-black tree. 
-\\Loop through the array $A$, and insert each element into a Red-black tree. Each node in the tree keeps a counter to record the number of occurrences of the element. As the number of distinct integers is $O(\log(n))$, the height of the Red-black tree will not exceeds $O(\log\log(n))$, so the time complexity of inserting an element into the tree is $O(\log\log(n))$. As there are $n$
-elements in the array, the total time complexity of constructing the Red-black tree is $n\log\log(n)$.\\
+Let $A$ be an array of size $n$ of integers with the property that the number of distinct integers is  $O(\log(n))$. Design an efficient $O(n\log\log(n))$ algorithm to sort $A$.\\
+\textbf{Solution:} 
+We use a variant of Quicksort to solve this problem. Instead of choosing a pivot randomly, we use the selection algorithm in Chapter II to find the median, and we choose the median to be the pivot. As we choose an ``ideal'' pivot at each step of Quicksort, this algorithm runs in worst-case $O(n\log(n))$ time. In order to reach the $O(n\log\log(n))$ time complexity, we need to merge the duplicated numbers, and keep a counter for each integer in the array to record its number of
+occurrences. \\
+\begin{enumerate}
+    \item First use the selection algorithm described in Chapter II of CLRS to find the median $k$ of $A$. This works in $O(n)$ time.
+    \item Then we partition $A$ to put $k$ in the right position, which means all the integers on the left side of $k$ are smaller than $k$, and all the integers on the right side of $k$ are larger than $k$. All the repeated $k$'s in the array are deleted and we keep a counter for $k$ to record its number of occurrences. We do this by using a $2$-dimensional array with $2$ rows, the first row of the array stores the integers in the array, and each integer in the first row has its number
+        of occurrences stored in the second row with the same index. This step can be done by looping through the array twice. In the first loop we partition the array, in the second loop we merge the duplicated $k$s and copy the
+        integers to a new array. All of these work in $O(n)$ time.
+    \item We repeat the first and second steps recursively on both sides of $k$. Because all the duplicated integers have been removed, we can finally get a sorted array of length $O(\log{n})$. As we know the number of occurrences of each integer in the array, we can repopulate all the integers of $A$ in sorted order. 
+\end{enumerate}
+Each distinct integer in the array is either selected as the median or left to the end to become a partition of length $1$. This means if we view the recursion calls as a binary tree, there are $O(\log(n))$ nodes in the tree. And as we always choose the median, the tree is balanced. So the depth of the tree is $O(\log\log(n))$. On each level of the tree, we will use $O(n)$ time to do the median selection and partition, so the total time complexity of this algorithm is
+$O(n\log\log(n))$.\\
+The pseudocode for this algorithm is shown in Algorithm \ref{algo:sort}, Algorithm \ref{algo:dosort} and Algorithm \ref{algo:part}. Use $sort(A)$ to sort the array. \\
+As this algorithm is a variant of Quicksort, the correctness is guaranteed since Quicksort is correct. \\
+\begin{algorithm}
+    \caption{$sort(A)$}
+    \label{algo:sort}
+    \begin{algorithmic}[1]
+        \STATE Declare $B$ to be a 2-dimensional array with $2$ rows
+        \FOR{$i \leftarrow 1$ \textbf{to} $length(A)$}
+            \STATE $B[i][1] \leftarrow A[i]$
+            \STATE $B[i][2] \leftarrow 1$
+        \ENDFOR
+        \STATE $doSort(B, 1, length(B))$
+        \STATE $C \leftarrow []$
+        \STATE $k \leftarrow 1$
+        \FOR{$i \leftarrow 1$ \textbf{to} $length(B)$}
+            \FOR{$j \leftarrow 1$ \textbf{to} $B[i][2]$}
+                \STATE $C[k++] \leftarrow B[i]$ 
+            \ENDFOR
+        \ENDFOR
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+    \caption{$doSort(B, p, q)$}
+    \label{algo:dosort}
+    \begin{algorithmic}[1]
+        \STATE $k \leftarrow findMedian(B, p, q)$ 
+        \STATE $B \leftarrow partition(B, p, q, k)$
+        \STATE Declare $C$ to be a array with the same size with $B$
+        \STATE $j \leftarrow 1$
+        \FOR{$i \leftarrow 1$ \textbf{to} $length(B)$}
+        \IF{$B[i][1] != k$ \OR ($B[i][1] == k$ \AND $C[j][1] != k$)}
+                \STATE $C[j][1] \leftarrow B[i][1]$
+                \STATE $C[j][2] \leftarrow B[i][2]$
+                \STATE $j++$
+            \ELSE
+                \STATE $C[j][2]++$ 
+                \STATE $pos \leftarrow j$
+            \ENDIF
+        \ENDFOR
+        \STATE $B \leftarrow C$
+        \STATE $doSort(B, p, pos - 1)$
+        \STATE $doSort(B, pos + 1, q)$
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+    \caption{$partition(B, p, q, k)$}
+    \label{algo:part}
+    \begin{algorithmic}[1]
+        \STATE $i \leftarrow p - 1$
+        \FOR{$j \leftarrow p$ \textbf{to} $r - 1$}
+            \IF{$B[j] \le k$}
+                \STATE $i \leftarrow i + 1$
+                \STATE exchange $B[i][1]$ with $B[j][1]$
+                \STATE exchange $B[i][2]$ with $B[j][2]$
+            \ENDIF
+        \ENDFOR
+        \RETURN $B$
+    \end{algorithmic}
+\end{algorithm}
+
+Another efficient way to solve this problem is to use a self-balancing binary search tree like Red-black tree. 
+\\Loop through the array $A$, and insert each element into a Red-black tree. Each node in the tree keeps a counter to record the number of occurrences of the element (the counters are initialized to be $1$). As the number of distinct integers is $O(\log(n))$, the height of the Red-black tree will not exceeds $O(\log\log(n))$, so the time complexity of inserting an element into the tree is $O(\log\log(n))$. As there are $n$
+elements in the array to be inserted to the tree, the total time complexity of constructing the Red-black tree is $n\log\log(n)$.\\
 Now traverse the Red-black tree in in-order to repopulate a sorted array. If the counter on a node is $k$, the element needs to be repeated for $k$ times. Traversing the tree works in $O(\log(n))$ time as there are $O(\log(n))$ nodes in the tree and repopulating the array works in $O(n)$ time as the number of integers is $O(n)$, so the overall time complexity of this step is $O(n)$.\\
 As a whole, the overall time complexity of the algorithm is $O(n\log\log(n)) + O(n)=O(n\log\log(n))$.
 
 \subsection{(10 points)}
 Let A be an array of size $n$ of integers with the property that the first $n-\sqrt{n}$ integers are sorted. Design an efficient $o(n\log(n))$ algorithm to sort $A$.\\
 
-\textbf{Solution:} First use randomized quicksort to sort the last $\sqrt(n)$ integers, and this can be done in $O(\sqrt{n}\log{\sqrt{n}}$ time. Then use the merge operation in mergesort to merge the first $n-\sqrt{n}$ integers and the last $\sqrt{n}$ integers. This step runs in $n-\sqrt{n}$ time as $n-\sqrt{n}>\sqrt{n}$ when $n$ is sufficiently large. The time complexity of the whole algorithm is $O(\sqrt{n}\log{\sqrt{n}}) +
-O(n-\sqrt{n}=O(\sqrt{n}(\frac{1}{2}\log{n}+\sqrt{n}-1)))=O(n)$, which means the algorithm runs in $o(n\log{n})$ time.
+\textbf{Solution:} 
+\begin{enumerate}
+    \item First use Mergesort to sort the last $\sqrt{n}$ integers, and this can be done in $O(\sqrt{n}\log{\sqrt{n}})$ time. 
+    \item Then use the merge operation in Mergesort to merge the first $n-\sqrt{n}$ integers and the last $\sqrt{n}$ integers. This step runs in $n-\sqrt{n}$ time as $n-\sqrt{n}>\sqrt{n}$ when $n$ is sufficiently large. The time complexity of the whole algorithm is $T(n)=O(\sqrt{n}\log{\sqrt{n}}) +
+O(n-\sqrt{n})=O(\sqrt{n}(\frac{1}{2}\log{n}+\sqrt{n}-1))$, as
+\begin{align}
+    \lim_{n \rightarrow +\infty}{\frac{\sqrt{n}(\frac{1}{2}\log{n}+\sqrt{n}-1)}{n\log{n}}} 
+    &= \lim_{n \rightarrow +\infty}({\frac{1}{2\sqrt{n}}+\frac{1}{\log{n}}-\frac{1}{\sqrt{n}\log{n}}})\\
+    &= 0
+\end{align}
+we have $T(n)=O(n)$. Because $n=o(n\log(n))$, we know that the algorithm runs in $o(n\log{n})$ time.
+\end{enumerate}
 
-$$
-\begin{pmatrix}
-    \cos(45^{\circ}) & -\sin(45^{\circ}) & 15 \\
-    \sin(45^{\circ}) & \cos(45^{\circ}) & 0\\
-    0 & 0 & 1
-\end{pmatrix}
-$$
 \end{document}
 
 
